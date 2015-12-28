@@ -1,4 +1,4 @@
-## ʃyslog++
+## ʃyslog-middleware
 
 highly extendable, syslog-compatible UDP/TCP loggingdaemon with use()-middleware support (like express)
 

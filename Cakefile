@@ -20,8 +20,8 @@ test = (callback) ->
   '''
   console.log woof
   run( './test/test-unix' ) (code) ->
-    run( 'coffee --nodejs --harmony ./test/test.coffee' ) (code) ->
-      process.exit code
+    process.exit code
+    #run( 'coffee --nodejs --harmony ./test/test.coffee' ) (code) ->
 
 task 'test', 'Run all tests', ->
   test()
