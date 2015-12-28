@@ -1,0 +1,18 @@
+#!/bin/bash 
+SELF_PATH="$(dirname "$(readlink -f "$0")" )"
+
+echo "setting up server"
+
+DEBUG=1 timeout 5s coffee $SELF_PATH/../server.coffee | tee /tmp/out &
+
+sleep 2s
+
+echo "triggering log"
+
+logger -d -P 1338 -i -p local3.info -t FLOP '{"flop":"flap","template":"#fuzzypipe {{indent:10:flop}}::{{indent:10:priority}}'"$(date)"'"}';
+sleep 1s;
+logger -d -P 1338 -i -p local3.info -t FLOP '{"flop":"flap","template":"#fuzzypipe {{indent:10:flop}}::{{indent:10:priority}}'"$(date)"'"}';
+
+output="$(</tmp/out)"
+
+[[ ${#output} == 0 ]] && exit 1 || exit 0

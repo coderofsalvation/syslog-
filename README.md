@@ -1,4 +1,4 @@
-## Ⴝyslog++
+## ʃyslog++
 
 highly extendable, syslog-compatible UDP/TCP loggingdaemon with use()-middleware support (like express)
 
@@ -9,13 +9,17 @@ highly extendable, syslog-compatible UDP/TCP loggingdaemon with use()-middleware
     $ DEBUG=1 SYSLOG_HOST=127.0.0.1 SYSLOG_UDP_PORT=1338 SYSLOG_TCP_PORT=1337 node server.js
     input::syslog UDP Server listening on 127.0.0.1:1338
 
-and then 
+and then in another console
 
-    $ logger -d -P 1338 -i -p local3.info -t FLOP '{"flop":"flap","template":"#fuzzypipe {{indent:10:flop}}::{{indent:10:priority}}'"$(date)"'"}'
+    $ logger -d -P 1338 -i -p local3.info -t FLOP '{"flop":"flap","template":"{{indent:10:flop}}::{{indent:10:priority}}'"$(date)"'"}'
+
+will be outputted like:
+
+    flap       ::158        Mon Dec 28 22:29:08 CET 2015
 
 see [test/test.coffee] for an example of sending syslogmessages using nodejs and [syslog-client](https://npmjs.org/syslog-client)
 
-The basic design is `input⟶parser⟶output`, therefore highly extendable:
+The basic design is i/p/o: `input ⟶ parser ⟶ output`, therefore highly extendable:
 
     varlogserver = require('syslog++');
 

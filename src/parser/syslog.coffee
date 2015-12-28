@@ -13,7 +13,7 @@ module.exports = ( (app,data,next) ->
     for line in lines 
       continue if not line.length 
       line = syslog_parse( line+"\n" )
-      if line.message and line.message[0] == "{" and line.message[1] is not "{"
+      if line.message and line.message[0] == "{" and line.message[1] != "{"
         obj = JSON.parse line.message 
         line[k] = v for k,v of obj
         line.message = obj.message || line.template || ""
