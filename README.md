@@ -9,11 +9,11 @@ highly extendable, syslog-compatible UDP/TCP loggingdaemon with use()-middleware
     $ DEBUG=1 SYSLOG_HOST=127.0.0.1 SYSLOG_UDP_PORT=1338 SYSLOG_TCP_PORT=1337 node server.js
     input::syslog UDP Server listening on 127.0.0.1:1338
 
-and then in another console
+and then in another console:
 
     $ logger -d -P 1338 -i -p local3.info -t FLOP '{"flop":"flap","template":"{{indent:10:flop}}::{{indent:10:priority}}'"$(date)"'"}'
 
-will be outputted like:
+then the server would output this:
 
     flap       ::158        Mon Dec 28 22:29:08 CET 2015
 
@@ -40,6 +40,39 @@ The basic design is i/p/o: `input ⟶ parser ⟶ output`, therefore highly exten
 * automatically parses json when passed in syslog message
 * uses [syslog-parse](https://npmjs.org/syslog-parse) as middleware message-format
 
+
+## Data format
+
+The data which is passed around should be syslog-ish:
+
+    { priority: 86,
+      facilityCode: 10,
+      facility: 'authpriv',
+      severityCode: 6,
+      severity: 'info',
+      time: Mon Dec 28 2015 22:00:01 GMT+0100 (CET),
+      host: 'peach',
+      process: 'CRON',
+      pid: 2607,
+      template: "{{message}}"
+      message: 'pam_unix(cron:session): session closed for user sqz' 
+    }
+
+> note that the `template` field is optional and triggers the brown template engine
+
+## Template engine 
+
+Like nice-aligned messages?
+syslog++ uses [brown](https://npmjs.org/brown) as a template engine.
+
+#### a template like:
+
+    "{{process}} {{indent:40:message}} {{pid}}"
+
+would overwrite the `message` field with the evaluated result:
+
+    "CRON pam_unix(cron:session): session closed for user sqz              2607"
+
 ## Extend with Http request
 
 Syslog is just one inputformat, you could for example also add an http input `input/http.js`:
@@ -61,20 +94,7 @@ where `input/http.js` is something like this:
     
     }
 
-The code above is untested, but the idea is just to call `app.process(data)` with data like this:
-
-    { priority: 86,
-      facilityCode: 10,
-      facility: 'authpriv',
-      severityCode: 6,
-      severity: 'info',
-      time: Mon Dec 28 2015 22:00:01 GMT+0100 (CET),
-      host: 'peach',
-      process: 'CRON',
-      pid: 2607,
-      template: "{{message}}"
-      message: 'pam_unix(cron:session): session closed for user sqz' 
-    }
+The code above is untested, but the idea is just to call `app.process(data)` with data described in the __data format__ section 
 
 ## Todo 
 
