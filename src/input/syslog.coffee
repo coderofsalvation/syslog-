@@ -16,7 +16,7 @@ module.exports = (app) ->
   serveTCP = (host,port) ->
     net = require('net')
     server = net.createServer (socket) ->
-      console.log 'input::syslog UDP Server listening on ' + address.address + ':' + address.port
+      console.log 'input::syslog TCP Server listening on ' + host ':' + port
 
       socket.on 'data', (data) ->
         app.process data

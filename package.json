@@ -1,6 +1,6 @@
 {
   "name": "syslogd-middleware",
-  "version": "1.0.2",
+  "version": "1.0.31",
   "description": "highly extendable, syslog-compatible UDP/TCP loggingdaemon with use()-middleware support (like express)",
   "main": "index.js",
   "dependencies": {

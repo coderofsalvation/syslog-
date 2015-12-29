@@ -1,4 +1,5 @@
 #!/bin/bash
+coffee -c server.coffee ; git add server.*
 find src -name "*.coffee" | grep -v node_modules | while read file; do
   echo "compiling ${file/coffee$/js/g}";
   slug="$(dirname "$file")" ; outdir="${slug/src/lib}"

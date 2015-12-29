@@ -14,22 +14,22 @@
    * inputs
    */
 
-  require('./src/input/syslog')(logserver);
+  require('syslogd-middleware/src/input/syslog')(logserver);
 
 
   /*
    * parsers
    */
 
-  logserver.use(require('./src/parser/syslog'));
+  logserver.use(require('syslogd-middleware/src/parser/syslog'));
 
-  logserver.use(require('./src/parser/brown'));
+  logserver.use(require('syslogd-middleware/src/parser/brown'));
 
 
   /*
    * outputs
    */
 
-  logserver.outputs.push(require('./src/output/stdout'));
+  logserver.outputs.push(require('syslogd-middleware/src/output/stdout'));
 
 }).call(this);
