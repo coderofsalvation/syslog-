@@ -3,15 +3,24 @@ SELF_PATH="$(dirname "$(readlink -f "$0")" )"
 
 echo "setting up server"
 
-DEBUG=1 timeout 5s coffee $SELF_PATH/../server.coffee | tee /tmp/out &
+DEBUG=1 timeout 15s coffee $SELF_PATH/../server.coffee | tee /tmp/out &
 
 sleep 2s
 
-echo "triggering log"
+echo "triggering log (UDP)"
 
 logger -d -P 1338 -i -p local3.info -t FLOP '{"flop":"flap","template":"#fuzzypipe {{indent:10:flop}}::{{indent:10:priority}}'"$(date)"'"}';
 sleep 1s;
 logger -d -P 1338 -i -p local3.info -t FLOP '{"flop":"flap","template":"#fuzzypipe {{indent:10:flop}}::{{indent:10:priority}}'"$(date)"'"}';
+sleep 1s;
+
+echo "triggering log (TCP)"
+
+sleep 1s;
+logger -T -n 127.0.0.1 -P 1339 -i -p local3.info -t FLOP '{"flop":"flap","template":"#fuzzypipe {{indent:10:flop}}::{{indent:10:priority}}'"$(date)"'"}';
+logger -T -n 127.0.0.1 -P 1339 -i -p local3.info -t FLOP 'flop'
+sleep 1s;
+logger -T -n 127.0.0.1 -P 1339 -i -p local3.info -t FLOP '{"flop":"flap","template":"#fuzzypipe {{indent:10:flop}}::{{indent:10:priority}}'"$(date)"'"}';
 
 output="$(</tmp/out)"
 

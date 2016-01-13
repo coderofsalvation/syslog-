@@ -15,20 +15,37 @@ module.exports = (app) ->
 
   serveTCP = (host,port) ->
     net = require('net')
+    clients = [];
     server = net.createServer (socket) ->
-      console.log 'input::syslog TCP Server listening on ' + host ':' + port
+      #socket.write("syslogd: welcome " + socket.name + "\n");
 
       socket.on 'data', (data) ->
         app.process data
-      
-      socket.on 'close', (data) ->
-        console.log 'input:syslog TCP connection CLOSED'
+     
+      close = (data) ->
+        clients.splice clients.indexOf(socket), 1
+
+      socket.on 'end', close
+      socket.on 'close', close
+
+      broadcast = (message, sender) ->
+        clients.forEach (client) ->
+          # Don't want to send it to sender
+          if client == sender
+            return
+          client.write message
+          return
+        # Log it to the server output too
+        process.stdout.write message
+        return
         
       #socket.write "Echo server\n"
       #console.dir socket
       #socket.pipe socket
       return
+    console.log 'input::syslog TCP Server listening on ' + host+ ':' + port
     server.listen port, host 
 
-  serveUDP( process.env.SYSLOG_HOST || '127.0.0.1', process.env.SYSLOG_UDP_PORT || 1338 ) 
   serveTCP( process.env.SYSLOG_HOST || '127.0.0.1', process.env.SYSLOG_TCP_PORT || 1339 )
+  serveUDP( process.env.SYSLOG_HOST || '127.0.0.1', process.env.SYSLOG_UDP_PORT || 1338 ) 
+  return
