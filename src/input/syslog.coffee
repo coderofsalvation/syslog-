@@ -24,6 +24,8 @@ module.exports = (app) ->
      
       close = (data) ->
         clients.splice clients.indexOf(socket), 1
+      
+      socket.setTimeout 500,close
 
       socket.on 'end', close
       socket.on 'close', close
