@@ -40,6 +40,31 @@ The basic design is i/p/o: `input ⟶ parser ⟶ output`, therefore highly exten
 * automatically parses json when passed in syslog message
 * uses [syslog-parse](https://npmjs.org/syslog-parse) as middleware message-format
 
+## How can clients log to this?
+
+Easy, using winston or the unix `logger` utility:
+
+```javascript
+const winston = require('winston');
+require('winston-syslog')
+
+const logger = winston.createLogger({ levels: winston.config.syslog.levels })
+logger.add(new winston.transports.Syslog({
+    port:1339,
+    protocol:'tcp4',
+    host: process.env.SYSLOG_HOST || 'localhost'
+}))
+
+// If we're not in production then log to the `console` with the format:
+// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple(),
+  }));
+}
+logger.log({level:'info', message:"this is a message"})
+```
+
 
 ## Data format
 

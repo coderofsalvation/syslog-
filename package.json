@@ -1,11 +1,11 @@
 {
   "name": "syslogd-middleware",
-  "version": "1.0.33",
+  "version": "1.1.0",
   "description": "highly extendable, syslog-compatible UDP/TCP loggingdaemon with use()-middleware support (like express)",
   "main": "index.js",
   "dependencies": {
     "brown": "^1.1.28",
-    "syslog-parse": "https://github.com/coderofsalvation/syslog-parse.git"
+    "nsyslog-parser": "^0.9.6"
   },
   "devDependencies": {
     "syslog-client": "^1.0.6"
@@ -14,7 +14,14 @@
     "postinstall": "cd node_modules; ln -s ../. syslogd-middleware",
     "test": "cake test"
   },
-  "keywords":["syslog","daemon","server","template","json","middleware"],
+  "keywords": [
+    "syslog",
+    "daemon",
+    "server",
+    "template",
+    "json",
+    "middleware"
+  ],
   "author": "coderofsalvation",
   "license": "ISC"
 }

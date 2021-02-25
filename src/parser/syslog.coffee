@@ -2,7 +2,7 @@
 # parse syslog strings into json
 ###
 
-syslog_parse = require 'syslog-parse'
+syslog_parse = require 'nsyslog-parser'
 
 module.exports = ( (app,data,next) ->
   
@@ -10,12 +10,12 @@ module.exports = ( (app,data,next) ->
     return data if typeof data is not "string"
     lines = String(data).split("\n")
     items = []
-    for line in lines 
-      continue if not line.length 
+    for line in lines
+      continue if not line.length
       line = syslog_parse( line+"\n" )
       if line.message and line.message[0] == "{" and line.message[1] != "{"
         try
-          obj = JSON.parse line.message 
+          obj = JSON.parse line.message
           line[k] = v for k,v of obj
           line.message = obj.message || line.template || ""
         catch e
